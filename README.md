@@ -152,5 +152,5 @@ This project is licensed under the [UNLICENSED](LICENSE).
 
 ---
 
-For questions or issues, please visit [Issues](https://github.com/didiamuri/mpesa-payment/issues).
+For questions or issues, please visit [Issues](https://didiamuri.dev). or send email to [didiamuri@gmail.com](mailto=didiamuri@gmail.com).
 
