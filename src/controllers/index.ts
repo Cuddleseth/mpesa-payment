@@ -71,6 +71,140 @@ export class IndexController {
         }
     }
 
+    static async businessToBusinessTransaction(req: Request, res: Response, next: NextFunction) {
+
+        if (!req.body.sessionId) {
+            return next(new AppError(`Your session has expired or you do not have authorization to access this resource`, 401));
+        }
+
+        if (!req.body.amount || !req.body.currency || !req.body.primaryPartyCode || !req.body.receiverPartyCode ||
+            !req.body.thirdPartyConversationID || !req.body.transactionReference || !req.body.purchasedItemsDesc) {
+            return next(new AppError(`Missing mandatory information`, 406));
+        }
+
+        try {
+            const public_key = process.env.MPESA_UAT_API_PUBLIC_KEY;
+            const api_path = `${process.env.MPESA_UAT_API_PATH}/b2bPayment/`;
+            const api_address = process.env.MPESA_UAT_API_ADDRESS;
+
+            const {
+                amount, currency, sessionId, primaryPartyCode, receiverPartyCode,
+                thirdPartyConversationID, transactionReference, purchasedItemsDesc
+            } = req.body;
+
+            const runTransaction = spawn('python3', ['src/scripts/b2b_single_stage.py',
+                sessionId, public_key, api_path, api_address, amount, currency, primaryPartyCode,
+                receiverPartyCode, thirdPartyConversationID, transactionReference, purchasedItemsDesc
+            ]);
+
+            runTransaction.stdout.on('data', async (data) => {
+                const response = data.toString();
+
+                const responseCodeMatch = response.match(/<Response \[(\d+)\]>/);
+                const responseCode = responseCodeMatch ? parseInt(responseCodeMatch[1], 10) : null;
+
+                const jsonMatch = response.match(/\{[\s\S]*\}/);
+
+                if (responseCode > 201) {
+                    const jsonResponse = JSON.parse(jsonMatch[0]);
+                    return next(new AppError(jsonResponse?.output_error ?? jsonResponse?.output_ResponseDesc, responseCode));
+                }
+
+                if (jsonMatch) {
+                    try {
+                        const jsonResponse = JSON.parse(jsonMatch[0]);
+                        res.status(responseCode || 200).json({
+                            statusText: "success",
+                            statusCode: responseCode || 200,
+                            ...jsonResponse
+                        });
+                    } catch (e) {
+                        next(new AppError(`Error parsing JSON data`, 500));
+                    }
+                } else {
+                    next(new AppError(`No valid JSON found in Python script output`, 500));
+                }
+            });
+
+            runTransaction.stderr.on('data', (data) => {
+                console.log(`stderr: ${data}`)
+            });
+
+            runTransaction.on('close', (code) => {
+                console.log(`Process exited with code ${code}`)
+            });
+        } catch (e) {
+            next(new AppError(e.message ?? `Internal server error`, 500));
+        }
+    }
+
+    static async businessToCustomerTransaction(req: Request, res: Response, next: NextFunction) {
+
+        if (!req.body.sessionId) {
+            return next(new AppError(`Your session has expired or you do not have authorization to access this resource`, 401));
+        }
+
+        if (!req.body.amount || !req.body.currency || !req.body.customerMSISDN || !req.body.serviceProviderCode ||
+            !req.body.thirdPartyConversationID || !req.body.transactionReference || !req.body.paymentItemsDesc) {
+            return next(new AppError(`Missing mandatory information`, 406));
+        }
+
+        try {
+            const public_key = process.env.MPESA_UAT_API_PUBLIC_KEY;
+            const api_path = `${process.env.MPESA_UAT_API_PATH}/b2cPayment/`;
+            const api_address = process.env.MPESA_UAT_API_ADDRESS;
+
+            const {
+                amount, currency, sessionId, customerMSISDN, serviceProviderCode,
+                thirdPartyConversationID, transactionReference, paymentItemsDesc
+            } = req.body;
+
+            const runTransaction = spawn('python3', ['src/scripts/b2c_single_stage.py',
+                sessionId, public_key, api_path, api_address, amount, currency, customerMSISDN,
+                serviceProviderCode, thirdPartyConversationID, transactionReference, paymentItemsDesc
+            ]);
+
+            runTransaction.stdout.on('data', async (data) => {
+                const response = data.toString();
+
+                const responseCodeMatch = response.match(/<Response \[(\d+)\]>/);
+                const responseCode = responseCodeMatch ? parseInt(responseCodeMatch[1], 10) : null;
+
+                const jsonMatch = response.match(/\{[\s\S]*\}/);
+
+                if (responseCode > 201) {
+                    const jsonResponse = JSON.parse(jsonMatch[0]);
+                    return next(new AppError(jsonResponse?.output_error ?? jsonResponse?.output_ResponseDesc, responseCode));
+                }
+
+                if (jsonMatch) {
+                    try {
+                        const jsonResponse = JSON.parse(jsonMatch[0]);
+                        res.status(responseCode || 200).json({
+                            statusText: "success",
+                            statusCode: responseCode || 200,
+                            ...jsonResponse
+                        });
+                    } catch (e) {
+                        next(new AppError(`Error parsing JSON data`, 500));
+                    }
+                } else {
+                    next(new AppError(`No valid JSON found in Python script output`, 500));
+                }
+            });
+
+            runTransaction.stderr.on('data', (data) => {
+                console.log(`stderr: ${data}`)
+            });
+
+            runTransaction.on('close', (code) => {
+                console.log(`Process exited with code ${code}`)
+            });
+        } catch (e) {
+            next(new AppError(e.message ?? `Internal server error`, 500));
+        }
+    }
+
     static async customerToBusinessTransaction(req: Request, res: Response, next: NextFunction) {
 
         if (!req.body.sessionId) {
