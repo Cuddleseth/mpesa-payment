@@ -77,24 +77,23 @@ export class IndexController {
             return next(new AppError(`Your session has expired or you do not have authorization to access this resource`, 401));
         }
 
+        if (!req.body.amount || !req.body.currency || !req.body.customerMSISDN || !req.body.serviceProviderCode ||
+            !req.body.thirdPartyConversationID || !req.body.transactionReference || !req.body.purchasedItemsDesc) {
+            return next(new AppError(`Missing mandatory information`, 406));
+        }
+
         try {
-            const session_id = req.body.sessionId;
             const public_key = process.env.MPESA_UAT_API_PUBLIC_KEY;
             const api_path = `${process.env.MPESA_UAT_API_PATH}/c2bPayment/singleStage/`;
             const api_address = process.env.MPESA_UAT_API_ADDRESS;
 
             const {
-                amount,
-                currency,
-                customerMSISDN,
-                serviceProviderCode,
-                thirdPartyConversationID,
-                transactionReference,
-                purchasedItemsDesc
+                amount, currency, sessionId, customerMSISDN, serviceProviderCode,
+                thirdPartyConversationID, transactionReference, purchasedItemsDesc
             } = req.body;
 
             const runTransaction = spawn('python3', ['src/scripts/c2b_single_stage.py',
-                session_id, public_key, api_path, api_address, amount, currency, customerMSISDN,
+                sessionId, public_key, api_path, api_address, amount, currency, customerMSISDN,
                 serviceProviderCode, thirdPartyConversationID, transactionReference, purchasedItemsDesc
             ]);
 
