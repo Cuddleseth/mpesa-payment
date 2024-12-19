@@ -81,7 +81,7 @@ The application uses environment variables for configuration. Below are the key 
 ## Project Structure
 ```
 apps
-├── api
+├── mpesa-payment
 │   ├── src
 │   │   ├── controllers
 │   │   ├── middlewares
