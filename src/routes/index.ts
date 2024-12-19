@@ -13,4 +13,6 @@ apiRouter.get('/', (_: Request, res: Response) => {
     })
 });
 
+apiRouter.use('/mpesa', require('./mpesa').default);
+
 export default apiRouter;
