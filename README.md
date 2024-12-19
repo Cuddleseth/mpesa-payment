@@ -21,9 +21,8 @@ M-Pesa Payment API is a Node.js-based application designed to facilitate integra
 ## Getting Started
 
 ### Prerequisites
-- Node.js >= 16.x
-- Yarn or npm
-- Redis server (for rate-limiting)
+- Node.js >= 20.x
+- Pnpm, Yarn or npm
 
 ### Installation
 
