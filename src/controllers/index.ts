@@ -72,8 +72,13 @@ export class IndexController {
     }
 
     static async customerToBusinessTransaction(req: Request, res: Response, next: NextFunction) {
+
+        if (!req.body.sessionId) {
+            return next(new AppError(`Your session has expired or you do not have authorization to access this resource`, 401));
+        }
+
         try {
-            const api_key = 'bf3e805031e7426bb7dc6ef2795e8523';
+            const session_id = req.body.sessionId;
             const public_key = process.env.MPESA_UAT_API_PUBLIC_KEY;
             const api_path = `${process.env.MPESA_UAT_API_PATH}/c2bPayment/singleStage/`;
             const api_address = process.env.MPESA_UAT_API_ADDRESS;
@@ -89,7 +94,7 @@ export class IndexController {
             } = req.body;
 
             const runTransaction = spawn('python3', ['src/scripts/c2b_single_stage.py',
-                api_key, public_key, api_path, api_address, amount, currency, customerMSISDN,
+                session_id, public_key, api_path, api_address, amount, currency, customerMSISDN,
                 serviceProviderCode, thirdPartyConversationID, transactionReference, purchasedItemsDesc
             ]);
 
