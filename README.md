@@ -108,22 +108,22 @@ apps
 - Returns API status, uptime, and server details.
 
 ### M-Pesa Routes
-**GET /mpesa/generate-token**
+**GET /api/v1/mpesa/generate-token**
 - Generates an access token (requires authorization).
 
-**GET /mpesa/generate-session-key**
+**GET /api/v1/mpesa/generate-session-key**
 - Creates a session key (requires authorization).
 
-**POST /mpesa/transaction/b2b**
+**POST /api/v1/mpesa/transaction/b2b**
 - Processes a B2B transaction (requires authorization and body params).
 
-**POST /mpesa/transaction/b2c**
+**POST /api/v1/mpesa/transaction/b2c**
 - Processes a B2C transaction (requires authorization and body params).
 
-**POST /mpesa/transaction/c2c**
+**POST /api/v1/mpesa/transaction/c2c**
 - Processes a C2C transaction (requires authorization and body params).
 
-**POST /mpesa/transaction/c2b**
+**POST /api/v1/mpesa/transaction/c2b**
 - Processes a C2B transaction (requires authorization and body params).
 
 ---
