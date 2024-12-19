@@ -45,23 +45,33 @@ $ pnpm install
 $ pnpm dev
 ```
 
+5. Build the application for production:
+```bash
+$ pnpm build
+```
+
+6. Start the application in production mode:
+```bash
+$ pnpm start
+```
+
 ---
 
 ## Environment Variables
 
 The application uses environment variables for configuration. Below are the key variables:
 
-| Variable                      | Description                                           |
-|-------------------------------|-------------------------------------------------------|
-| `PORT`                        | Port on which the application runs                    |
+| Variable                      | Description                                             |
+|-------------------------------|---------------------------------------------------------|
+| `PORT`                        | Port on which the application runs                      |
 | `NODE_ENV`                    | Application environment (development, production, etc.) |
-| `AUTHORIZED_DOMAINS`          | Comma-separated list of domains allowed for CORS      |
-| `API_KEY`                     | API key for access to this API                        |
-| `MPESA_UAT_API_PATH`          | M-Pesa API path for UAT environment                   |
-| `MPESA_UAT_API_ADDRESS`       | M-Pesa API address for UAT environment                |
-| `MPESA_SANDBOX_BASE_URL`      | Base URL for M-Pesa sandbox environment               |
-| `MPESA_UAT_API_KEY`           | API key for M-Pesa UAT                                |
-| `MPESA_UAT_API_PUBLIC_KEY`    | Public key for M-Pesa UAT                             |
+| `AUTHORIZED_DOMAINS`          | Comma-separated list of domains allowed for CORS        |
+| `API_KEY`                     | API KEY for access to this APIs                         |
+| `MPESA_UAT_API_PATH`          | M-Pesa API path for UAT environment                     |
+| `MPESA_UAT_API_ADDRESS`       | M-Pesa API address for UAT environment                  |
+| `MPESA_SANDBOX_BASE_URL`      | Base URL for M-Pesa sandbox environment                 |
+| `MPESA_UAT_API_KEY`           | API key for M-Pesa UAT                                  |
+| `MPESA_UAT_API_PUBLIC_KEY`    | Public key for M-Pesa UAT                               |
 
 ---
 
@@ -71,7 +81,6 @@ The application uses environment variables for configuration. Below are the key 
 - **Session Key Management**: Handles session keys for authenticated communication.
 - **B2B Transactions**: Processes business-to-business transactions.
 - **B2C Transactions**: Processes business-to-customer transactions.
-- **C2C Transactions**: Processes customer-to-customer transactions.
 - **C2B Transactions**: Processes customer-to-business transactions.
 - **Rate Limiting**: Protects APIs from abuse using Redis-based rate limiting.
 - **Security**: Implements industry-standard security practices (CORS, Helmet).
@@ -115,15 +124,48 @@ apps
 
 **POST /api/v1/mpesa/transaction/b2b**
 - Processes a B2B transaction (requires authorization and body params).
+```bash
+{
+  "amount": "10", 
+  "country": "DRC", 
+  "currency": "USD", 
+  "primaryPartyCode": "000000", 
+  "receiverPartyCode": "000001", 
+  "thirdPartyConversationID": "asv02e5958774f7ba228d83d0d689761", 
+  "transactionReference": "T12344C",
+  "purchasedItemsDesc": "Shoes"
+}
+```
 
 **POST /api/v1/mpesa/transaction/b2c**
 - Processes a B2C transaction (requires authorization and body params).
-
-**POST /api/v1/mpesa/transaction/c2c**
-- Processes a C2C transaction (requires authorization and body params).
+```bash
+{
+  "amount": "10", 
+  "country": "DRC", 
+  "currency": "USD", 
+  "customerMSISDN": "000000000001", 
+  "serviceProviderCode": "000000", 
+  "thirdPartyConversationID": "asv02e5958774f7ba228d83d0d689761", 
+  "transactionReference": "T12344C",
+  "paymentItemsDesc": "Salary payment"
+}
+```
 
 **POST /api/v1/mpesa/transaction/c2b**
 - Processes a C2B transaction (requires authorization and body params).
+```bash
+{
+  "amount": "10", 
+  "country": "DRC", 
+  "currency": "USD", 
+  "customerMSISDN": "000000000001", 
+  "serviceProviderCode": "000000", 
+  "thirdPartyConversationID": "asv02e5958774f7ba228d83d0d689761", 
+  "transactionReference": "T1234C",
+  "purchasedItemsDesc": "Shoes"
+}
+```
 
 ---
 

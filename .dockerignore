@@ -1,7 +1,8 @@
+.dockerignore
+.env
 node_modules
 dist
 npm-debug.log
 Dockerfile
-.dockerignore
 pnpm-lock.yaml
 package-lock.json
