@@ -13,7 +13,7 @@ app.set('trust proxy', true);
 app.set('port', port);
 
 app.use(helmet);
-app.use(morgan('combined'));
+app.use(morgan('tiny'));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors);

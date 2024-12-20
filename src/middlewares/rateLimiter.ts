@@ -4,7 +4,7 @@ import { RateLimiterMemory } from "rate-limiter-flexible";
 
 const limiter = new RateLimiterMemory({
     points: 10, // maximum number of requests allowed
-    duration: 60 * 1000, // time frame in seconds
+    duration: 60, // time frame in seconds
 });
 
 export default function rateLimiter(req: Request, res: Response, next: NextFunction) {
