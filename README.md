@@ -134,6 +134,7 @@ apps
   "thirdPartyConversationID": "asv02e5958774f7ba228d83d0d689761", 
   "transactionReference": "T12344C",
   "purchasedItemsDesc": "Shoes"
+  "sessionId":"a45402f3050d43a3bfe800135510f9f1"
 }
 ```
 
@@ -148,7 +149,8 @@ apps
   "serviceProviderCode": "000000", 
   "thirdPartyConversationID": "asv02e5958774f7ba228d83d0d689761", 
   "transactionReference": "T12344C",
-  "paymentItemsDesc": "Salary payment"
+  "paymentItemsDesc": "Salary payment",
+  "sessionId":"a45402f3050d43a3bfe800135510f9f1"
 }
 ```
 
@@ -163,7 +165,8 @@ apps
   "serviceProviderCode": "000000", 
   "thirdPartyConversationID": "asv02e5958774f7ba228d83d0d689761", 
   "transactionReference": "T1234C",
-  "purchasedItemsDesc": "Shoes"
+  "purchasedItemsDesc": "Shoes",
+  "sessionId":"a45402f3050d43a3bfe800135510f9f1"
 }
 ```
 
